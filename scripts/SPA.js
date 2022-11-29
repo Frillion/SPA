@@ -10,6 +10,17 @@ async function domloaded(){
         price_display.innerText = min;
         price_filter.addEventListener("input",()=>{
             price_display.innerText = price_filter.value;
+            const filtered_prices = pricers.filter(item=>{
+                return item.innerText < price_filter.value;
+            });
+            console.log(filtered_prices);
+            for(let i=0; i<pricers.length;i++){
+                if(filtered_prices.includes(pricers[i])){
+                    pricers[i].parentElement.setAttribute("class","hideItem");
+                }else{
+                    pricers[i].parentElement.removeAttribute("class");
+                }
+            }
         });
     }
     function getHighestPrice(ls){
@@ -28,12 +39,13 @@ async function domloaded(){
     }
     function fillContainer(con,ls){
         for(let i = 0; i < ls.length; i++){
-            const appended_item = document.createElement("li");
+            const appended_item = document.createElement("div");
             const item_picture = document.createElement("img");
             const item_name = document.createElement("div");
             const item_creator = document.createElement("div");
             const production_time = document.createElement("div");
             const pricer = document.createElement("div");
+            pricers.push(pricer);
             item_name.innerText = ls[i].painting;
             item_creator.innerText = ls[i].artist;
             production_time.innerText = ls[i].date;
@@ -59,10 +71,9 @@ async function domloaded(){
     const items = await FetchItems();
     initSlider(getLowestPrice(items),getHighestPrice(items));
     const item_container = document.createElement("div");
-    const item_list = document.createElement("ul");
-    item_list.style.listStyle = "none";
+    const item_list = document.createElement("div");
+    const pricers = [];
     fillContainer(item_list,items);
     item_container.appendChild(item_list);
-    document.body.appendChild(item_container) 
-
+    document.body.appendChild(item_container);
 }
