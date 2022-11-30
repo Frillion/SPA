@@ -6,58 +6,52 @@ async function domloaded(){
         const price_display = document.getElementById("priceDisplay");
         price_filter.setAttribute("max",max);
         price_filter.setAttribute("min",min);
+        price_filter.setAttribute("step",1);
         price_filter.value = min;
-        price_display.innerText = min;
+        price_display.innerText = items.sort(compare_price)[min].price;
         price_filter.addEventListener("input",()=>{
-            price_display.innerText = price_filter.value;
+            price_display.innerText = items[price_filter.value].price;
             const filtered_prices = pricers.filter(item=>{
-                return item.innerText < price_filter.value;
+                return item.innerText < price_display.innerText;
             });
-            console.log(filtered_prices);
             for(let i=0; i<pricers.length;i++){
                 if(filtered_prices.includes(pricers[i])){
-                    pricers[i].parentElement.setAttribute("class","hideItem");
+                    pricers[i].parentElement.parentElement.setAttribute("class",'hideItem');
                 }else{
-                    pricers[i].parentElement.removeAttribute("class");
+                    pricers[i].parentElement.parentElement.setAttribute("class","w3-col l3 m6 w3-margin-bottom");
                 }
             }
         });
     }
-    function getHighestPrice(ls){
-        let highest_price = 0;
-        for(let i = 0; i < ls.length; i++){
-            if(highest_price < ls[i].price){highest_price = ls[i].price}
-        }
-        return highest_price;
-    }
-    function getLowestPrice(ls){
-        let lowest_price = ls[0].price;
-        for(let i = 0; i < ls.length;i++){
-           if(lowest_price > ls[i].price){lowest_price = ls[i].price} 
-        }
-        return lowest_price;
-    }
     function fillContainer(con,ls){
         for(let i = 0; i < ls.length; i++){
             const appended_item = document.createElement("div");
+            const display_container = document.createElement("div");
             const item_picture = document.createElement("img");
             const item_name = document.createElement("div");
             const item_creator = document.createElement("div");
             const production_time = document.createElement("div");
             const pricer = document.createElement("div");
+            display_container.setAttribute("class","w3-display-container");
+            appended_item.setAttribute("class","w3-col l3 m6 w3-margin-bottom");
+            item_name.setAttribute("class","w3-display-topleft w3-black w3-padding");
+            item_creator.setAttribute("class","w3-black w3-padding");
+            production_time.setAttribute("class","w3-black w3-padding");
+            pricer.setAttribute("class","w3-black w3-padding");
+            item_picture.setAttribute("width","100%");
+            item_picture.setAttribute("height","425");
             pricers.push(pricer);
             item_name.innerText = ls[i].painting;
             item_creator.innerText = ls[i].artist;
             production_time.innerText = ls[i].date;
             pricer.innerText = ls[i].price;
             item_picture.src = ls[i].img;
-            item_picture.height = 500;
-            item_picture.width = 500;
-            appended_item.appendChild(item_picture);
-            appended_item.appendChild(item_name);
-            appended_item.appendChild(item_creator);
-            appended_item.appendChild(production_time);
-            appended_item.appendChild(pricer);
+            display_container.appendChild(item_picture);
+            display_container.appendChild(item_name);
+            display_container.appendChild(item_creator);
+            display_container.appendChild(production_time);
+            display_container.appendChild(pricer);
+            appended_item.appendChild(display_container);
             con.appendChild(appended_item);
         }
     }
@@ -66,14 +60,24 @@ async function domloaded(){
         try{
             const response = await fetch(url)
             return response.json();
-        }catch(err){console.log(err);}
+        }catch(err){(err);}
+    }
+    function compare_price(a,b){
+        if(a.price < b.price){
+            return -1;
+        }
+        if(a.price > b.price){
+            return 1;
+        }
+        return 0;
     }
     const items = await FetchItems();
-    initSlider(getLowestPrice(items),getHighestPrice(items));
+    initSlider(0,items.length-1);
     const item_container = document.createElement("div");
     const item_list = document.createElement("div");
+    item_list.setAttribute("class","w3-row-padding");
     const pricers = [];
-    fillContainer(item_list,items);
+    fillContainer(item_list,items.sort(compare_price));
     item_container.appendChild(item_list);
-    document.body.appendChild(item_container);
+    document.getElementById("pageContent").appendChild(item_container);
 }

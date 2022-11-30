@@ -6,10 +6,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="./scripts/SPA.js"></script>
     <link rel="stylesheet" href="./Styles/SPA.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <title>SPA Shop</title>
 </head>
 <body>
-    <input type="range"id="priceFilter" name="priceFilter" min="0" max="20">
-    <output id="priceDisplay"></output>
+    <div class="w3-top">
+        <div class="w3-bar w3-white w3-wide w3-padding w3-card">
+            <span>SPA Photo Gallery</span>
+        </div>
+    </div>
+    <header class="w3-display-container w3-content w3-wide" style="max-width:1500px">
+        <img class="w3-image" src="./imgs/girl-g7ea38d050_1280.jpg" width="1500px">
+        <div class="w3-display-middle w3-margin-top w3-center">
+            <h1 class="w3-xxlarge w3-text-white">
+                <span class="w3-padding w3-black w3-opacity-min">
+                    <b>SPA</b>
+                </span> 
+                <span class="w3-hide-small w3-text-light-grey">Photo Library</span>
+            </h1>
+        </div> 
+    </header>
+    <div id="pageContent" class="w3-content w3-padding" style="max-width:1564px">
+        <div class="w3-container w3-padding32">
+            <div class="w3-border-bottom w3-border-light-grey w3-padding-16">
+                <h3>Product Filters</h3>
+                <input type="range"id="priceFilter" name="priceFilter">
+                <output id="priceDisplay" ></output>
+            </div>
+        </div>
+    </div>
+    <footer class="w3-black w3-padding-16">
+        <h3 class="w3-padding">Contact</h3>
+        <span class="w3-padding">Email: fridriksoebech@gmail.com</span>
+    </footer>
 </body>
 </html>
