@@ -27,12 +27,35 @@
         </div> 
     </header>
     <div id="pageContent" class="w3-content w3-padding" style="max-width:1564px">
-        <div class="w3-container w3-padding32">
+        <div class="w3-container w3-padding-32">
             <div class="w3-border-bottom w3-border-light-grey w3-padding-16">
                 <h3>Product Filters</h3>
-                <input type="range"id="priceFilter" name="priceFilter">
-                <output id="priceDisplay" ></output>
+                <ul style="list-style:none;width:100%">
+                    <li class="w3-padding w3-wide">
+                        <output id="priceDisplay" class="w3-padding w3-black"></output>
+                        <input class="w3-bar w3-padding w3-wide"type="range"id="priceFilter" name="priceFilter">
+                    </li>
+                    <li class="w3-padding w3-wide" width="100%">
+                        <label for="artistFilter" class="w3-padding w3-black">Artist Name:</label>
+                        <input class="w3-bar w3-padding w3-wide" type="text" id="artistFilter" name="artistFilter">
+                    </li>
+                    <li class="w3-padding w3-wide">
+                        <label for="artFilter" class="w3-padding w3-black">Artwork Name:</label>
+                        <input class="w3-bar w3-padding w3-wide"type="text" id="artFilter" name="artFilter">
+                    </li>
+                    <li class="w3-padding w3-wide">
+                        <span class="w3-padding w3-black">Date From:</span>
+                        <input type="date" id="startDateFilter" name="startDateFilter">
+                    </li>
+                    <li class="w3-padding w3-wide">
+                        <span class="w3-padding w3-black">Date To:</span>
+                        <input type="date" id="endDateFilter" name="endDateFilter">
+                    </li>
+                </ul>
             </div>
+        </div>
+        <div class="w3-container w3-padding-32">
+            <h3 class="w3-border-bottom w3-border-light-grey w3-padding-16">Artworks</h3>
         </div>
     </div>
     <footer class="w3-black w3-padding-16">
