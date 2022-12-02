@@ -11,8 +11,8 @@ async function domloaded(){
         price_filter.addEventListener("input",()=>{
             price_display.innerText = items[price_filter.value].price;
             for (let i=0; i<pricers.length; i++){
-                if(pricers[i].innerText < price_display.innerText && !filtered_items.includes(pricers[i])){
-                    filtered_items.push(pricers[i]);
+                if(pricers[i].innerText < price_display.innerText && !filtered_pricers.includes(pricers[i])){
+                    filtered_pricers.push(pricers[i]);
                 }
             }
         });
@@ -43,15 +43,15 @@ async function domloaded(){
     }
     function filterArtist(){
         for(let i=0; i<artist.length; i++){
-            if(!artist[i].innerText.toLowerCase().includes(artist_filter.value.toLowerCase())&&!filtered_items.includes(artist[i])&&artist_filter.value != ""){
-                filtered_items.push(artist[i]);
+            if(!artist[i].innerText.toLowerCase().includes(artist_filter.value.toLowerCase())&&!filtered_artist.includes(artist[i])&&artist_filter.value != ""){
+                filtered_artist.push(artist[i]);
             }
         }
     }
     function filterArt(){
         for(let i=0; i<art.length;i++){
-            if(!art[i].innerText.toLowerCase().includes(art_filter.value.toLowerCase())&&!filtered_items.includes(art[i])&&art_filter.value != ""){
-                filtered_items.push(art[i]);
+            if(!art[i].innerText.toLowerCase().includes(art_filter.value.toLowerCase())&&!filtered_art.includes(art[i])&&art_filter.value != ""){
+                filtered_art.push(art[i]);
             }
         }
     }
@@ -59,8 +59,8 @@ async function domloaded(){
         const start_date = new Date(start_date_filter.value);
         for(let i=0; i<production_dates.length; i++){
             const compare_date = new Date(production_dates[i].innerText);
-            if(compare_date.getTime() < start_date.getTime()&&!filtered_items.includes(production_dates[i])&&start_date!=""){
-                filtered_items.push(production_dates[i]);
+            if(compare_date.getTime() < start_date.getTime()&&!filtered_dates.includes(production_dates[i])&&start_date!=""){
+                filtered_dates.push(production_dates[i]);
             }
         }
     }
@@ -68,8 +68,8 @@ async function domloaded(){
         const end_date = new Date(end_date_filter.value);
         for(let i=0; i<production_dates.length; i++){
             const compare_date = new Date(production_dates[i].innerText);
-            if(compare_date.getTime() > end_date.getTime()&&!filtered_items.includes[production_dates[i]]&&end_date!=""){
-                filtered_items.push(production_dates[i]);
+            if(compare_date.getTime() > end_date.getTime()&&!filtered_dates.includes[production_dates[i]]&&end_date!=""){
+                filtered_dates.push(production_dates[i]);
             }
         }
     }
@@ -121,7 +121,7 @@ async function domloaded(){
      Based On All Filter Parameters using the filtered_items List*/
     function setHidden(){
         for(let i=0; i<pricers.length;i++){
-            if(filtered_items.includes(pricers[i])||filtered_items.includes(artist[i])||filtered_items.includes(art[i])||filtered_items.includes(production_dates[i])){
+            if(filtered_pricers.includes(pricers[i])||filtered_artist.includes(artist[i])||filtered_art.includes(art[i])||filtered_dates.includes(production_dates[i])){
                 pricers[i].parentElement.parentElement.setAttribute("class",'hideItem');
             }else{
                 pricers[i].parentElement.parentElement.setAttribute("class","w3-col l3 m6 w3-margin-bottom");
@@ -129,19 +129,40 @@ async function domloaded(){
         }
     }
     /*Empties The filtered_items List So That setHidden() Can Show The Item Again*/
-    function emptyFilter(){
-        const start_compare_date = new Date(start_date_filter.value);
-        const end_compare_date = new Date(end_date_filter.value);
-        for(let i = 0; i < filtered_items.length;i++){
-            const date = new Date(filtered_items[i].innerText);
-            if(filtered_items[i].innerText >= price_display.innerText&&filtered_items[i].innerText.toLowerCase().includes(artist_filter.value.toLowerCase())&&filtered_items[i].innerText.toLowerCase().includes(art_filter.value.toLowerCase())&&date instanceof Date && isNaN(date.valueOf())){
-                filtered_items.splice(i,1);
+    function emptyFilters(){
+        const start_date = new Date(start_date_filter.value);
+        const end_date = new Date(end_date_filter.value);
+        for(let i = 0; i < filtered_pricers.length;i++){
+            if(filtered_pricers[i].innerText >= price_display.innerText){
+                filtered_pricers.splice(i,1);
             }
-            else if(date instanceof Date && !isNaN(date.valueOf())&&(end_compare_date.getTime() >= date.getTime() && date.getTime() >= start_compare_date.getTime())&&(end_date_filter.value!=""&&start_date_filter.value!="")){
-                filtered_items.splice(i,1);
+        }
+        for(let i=0; i< filtered_artist.length; i++){
+            if(filtered_artist[i].innerText.toLowerCase().includes(artist_filter.value.toLowerCase())){
+                filtered_artist.splice(i,1);
             }
-            else if(date instanceof Date && !isNaN(date.valueOf())&&(end_compare_date.getTime() >= date.getTime() || date.getTime() >= start_compare_date.getTime())&&(end_date_filter.value==""||start_date_filter.value=="")){
-                filtered_items.splice(i,1);
+        }
+        for(let i=0; i< filtered_art.length; i++){
+            if(filtered_art[i].innerText.toLowerCase().includes(art_filter.value.toLowerCase())){
+                filtered_art.splice(i,1);
+            }
+        }
+        for(let i=0;i < filtered_dates.length; i++){
+            const date = new Date(filtered_dates[i].innerText);
+            if(start_date_filter.value != ""&&end_date_filter.value != ""){
+                if(date.getTime()>=start_date.getTime() && date.getTime()<=end_date.getTime()){
+                    filtered_dates.splice(i,1);
+                }
+            }
+            else if(start_date_filter.value != ""){
+                if(date.getTime()>=start_date.getTime()){
+                    filtered_dates.splice(i,1);
+                }
+            }
+            else if(end_date_filter != ""){
+                if(date.getTime()<=end_date.getTime()){
+                    filtered_dates.splice(i,1);
+                }
             }
         }
     }
@@ -183,7 +204,10 @@ async function domloaded(){
     const item_container = document.createElement("div");
     const item_list = document.createElement("div");
     item_list.setAttribute("class","w3-row-padding");
-    const filtered_items = [];
+    const filtered_pricers = [];
+    const filtered_artist = [];
+    const filtered_art = [];
+    const filtered_dates = [];
     const pricers = [];
     const artist = [];
     const art = [];
@@ -192,6 +216,6 @@ async function domloaded(){
     item_container.appendChild(item_list);
     document.getElementById("pageContent").appendChild(item_container);
     window.setInterval(setHidden,100);
-    window.setInterval(emptyFilter,100);
+    window.setInterval(emptyFilters,100);
     window.setInterval(dynamicCalender,100);
 }
