@@ -130,11 +130,17 @@ async function domloaded(){
     }
     /*Empties The filtered_items List So That setHidden() Can Show The Item Again*/
     function emptyFilter(){
-        const start_date = new Date(start_date_filter.value);
-        const end_date = new Date(end_date_filter.value);
-        let date = undefined;
+        const start_compare_date = new Date(start_date_filter.value);
+        const end_compare_date = new Date(end_date_filter.value);
         for(let i = 0; i < filtered_items.length;i++){
-            if(filtered_items[i].innerText >= price_display.innerText&&filtered_items[i].innerText.toLowerCase().includes(artist_filter.value.toLowerCase())&&filtered_items[i].innerText.toLowerCase().includes(art_filter.value.toLowerCase())){
+            const date = new Date(filtered_items[i].innerText);
+            if(filtered_items[i].innerText >= price_display.innerText&&filtered_items[i].innerText.toLowerCase().includes(artist_filter.value.toLowerCase())&&filtered_items[i].innerText.toLowerCase().includes(art_filter.value.toLowerCase())&&date instanceof Date && isNaN(date.valueOf())){
+                filtered_items.splice(i,1);
+            }
+            else if(date instanceof Date && !isNaN(date.valueOf())&&(end_compare_date.getTime() >= date.getTime() && date.getTime() >= start_compare_date.getTime())&&(end_date_filter.value!=""&&start_date_filter.value!="")){
+                filtered_items.splice(i,1);
+            }
+            else if(date instanceof Date && !isNaN(date.valueOf())&&(end_compare_date.getTime() >= date.getTime() || date.getTime() >= start_compare_date.getTime())&&(end_date_filter.value==""||start_date_filter.value=="")){
                 filtered_items.splice(i,1);
             }
         }
